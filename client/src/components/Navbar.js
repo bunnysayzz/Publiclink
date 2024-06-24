@@ -10,6 +10,10 @@ const Navbar = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   return (
     <nav className="bg-gray-800 p-4 shadow-lg fixed w-full z-10">
       <div className="container mx-auto flex justify-between items-center">
@@ -36,16 +40,16 @@ const Navbar = () => {
             <FiMenu size={24} />
           </button>
           {menuOpen && (
-            <div className="dropdown-menu bg-gray-800 shadow-lg rounded-lg absolute right-4 top-12 w-48">
-              <Link to="/" className="block px-4 py-2 text-gray-300 hover:text-white">
+            <div className="dropdown-menu bg-gray-800 shadow-lg rounded-lg absolute right-0 top-12 w-6rem">
+              <Link to="/" className="block px-4 py-2 text-gray-300 hover:text-white" onClick={closeMenu}>
                 <FiHome className="mr-1" />
                 Home
               </Link>
-              <Link to="/about" className="block px-4 py-2 text-gray-300 hover:text-white">
+              <Link to="/about" className="block px-4 py-2 text-gray-300 hover:text-white" onClick={closeMenu}>
                 <FiInfo className="mr-1" />
                 About
               </Link>
-              <Link to="/signin" className="block px-4 py-2 text-gray-300 hover:text-white">
+              <Link to="/signin" className="block px-4 py-2 text-gray-300 hover:text-white" onClick={closeMenu}>
                 <FiLogIn className="mr-1" />
                 Sign In
               </Link>
