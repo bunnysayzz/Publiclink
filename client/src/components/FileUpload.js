@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { CloudUploadIcon, ClipboardCopyIcon } from '@heroicons/react/outline';
-import OuterLoop from './OuterLoop'; 
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
@@ -69,20 +68,19 @@ const FileUpload = () => {
   };
 
   return (
-    <div className="relative">
-      {/* OuterLoop component renders behind */}
-      <OuterLoop />
-
-      {/* FileUpload UI elements render in front */}
-      <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-gradient-to-r">
+    <div className="relative h-screen flex justify-center items-center">
+      <div className="absolute inset-0 flex justify-center items-center">
         <div
-          className="flex flex-col justify-center items-center w-11/12 max-w-lg p-10 border-4 border-dashed border-blue-500 rounded-xl shadow-md text-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl"
+          className="w-11/12 max-w-lg p-10 border-4 border-dashed border-blue-500 rounded-xl shadow-md text-center transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl"
           onDragOver={handleDragOver}
           onDrop={handleDrop}
           style={{
             background: 'rgba(255, 255, 255, 0.3)', // Adjusted to 30% transparent background
             backdropFilter: 'blur(10px)', // Optional: blur effect for better visibility
             boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Subtle shadow for depth
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <CloudUploadIcon className="h-20 w-20 text-blue-500 mb-4 animate-bounce" />
@@ -109,6 +107,7 @@ const FileUpload = () => {
                 className="text-blue-500 underline break-all hover:text-blue-600 transition-all duration-300 ease-in-out"
               >
                 {fileUrl}
+                
               </a>
               <ClipboardCopyIcon 
                 className="h-6 w-6 text-gray-500 cursor-pointer mt-2 hover:text-gray-700 transition-all duration-300 ease-in-out"
@@ -128,3 +127,4 @@ const FileUpload = () => {
 };
 
 export default FileUpload;
+
