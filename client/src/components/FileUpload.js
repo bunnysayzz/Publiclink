@@ -41,7 +41,7 @@ const FileUpload = () => {
       setUploading(true);
       setMessage('');
 
-      const res = await axios.post('http://localhost:8001/upload', formData, {
+      const res = await axios.post('https://publiclinkserver.onrender.com/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
