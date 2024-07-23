@@ -4,6 +4,7 @@ const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv');
 const cors = require('cors');
 const { Readable } = require('stream');
+const request = require("request");
 
 dotenv.config();
 
@@ -35,6 +36,26 @@ const bufferToStream = (buffer) => {
   return readable;
 };
 
+// Rebrandly API module
+const apiRequest = (endpoint, httpMethod, body, success, failure) => {
+  request({
+    uri: `https://api.rebrandly.com/v1/${endpoint}`,
+    method: httpMethod,
+    body: body ? JSON.stringify(body) : null,
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': process.env.URL_SHORTENER_API_KEY
+    }
+  }, (err, response, body) => {
+    if (err) failure(err);
+    else success(JSON.parse(body));
+  });
+};
+
+const createNewLink = (link, success, failure) => {
+  apiRequest("links", "POST", link, success, failure);
+};
+
 // Upload route
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
@@ -45,12 +66,23 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
     const stream = cloudinary.uploader.upload_stream(
       { resource_type: 'auto' },
-      (error, result) => {
+      async (error, result) => {
         if (error) {
           console.error('Upload Error:', error);
           return res.status(500).send({ error: 'Failed to upload file.' });
         }
-        res.status(200).json({ url: result.secure_url });
+
+        const linkDef = {
+          destination: result.secure_url,
+          domain: { fullName: "rebrand.ly" } // Use your Rebrandly domain
+        };
+
+        createNewLink(linkDef, (link) => {
+          res.status(200).json({ url: `https://${link.shortUrl}` });
+        }, (err) => {
+          console.error('Shortening Error:', err);
+          res.status(500).json({ error: 'Failed to shorten URL.' });
+        });
       }
     );
 

@@ -41,17 +41,18 @@ const FileUpload = () => {
       setUploading(true);
       setMessage('');
 
-      const res = await axios.post('https://publiclinkserver.onrender.com/upload', formData, {
+      const res = await axios.post('http://localhost:8001/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      setFileUrl(res.data.url);
+      setFileUrl(res.data.url); // This now contains the shortened URL
+      console.log('Shortened URL:', res.data.url); // Log the shortened URL to the console
       setMessage('File uploaded successfully.');
     } catch (err) {
       console.error('Upload Error:', err);
-      setMessage('Failed to upload file.');
+      setMessage(err.response?.data?.error || 'Failed to upload file.');
     } finally {
       setUploading(false);
     }
@@ -127,4 +128,3 @@ const FileUpload = () => {
 };
 
 export default FileUpload;
-
